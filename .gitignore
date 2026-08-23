@@ -1,0 +1,16 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# YOLO-generated outputs and downloaded weights
+runs/
+*.pt
+
+# Editor-local files
+.vscode/
