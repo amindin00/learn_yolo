@@ -31,6 +31,11 @@ yolo predict model=yolo26n.pt source=path/to/input.mp4
 yolo predict model=yolo26n.pt source=0 show=True
 ```
 
+```bash
+# astra
+yolo predict model=yolo26n.pt source=48 show=True
+```
+
 Predictions are written to `runs/detect/predict/` by default. Ultralytics creates incremented directories such as `predict2/` when the default output already exists.
 
 The same workflow can be used from Python:
