@@ -21,19 +21,14 @@ yolo checks
 
 ## Run inference
 
-Replace the source with an image, a video, a directory, a URL, or webcam index `0`.
+Replace the source with an image, a video, a directory, a URL, or a webcam index. See [Choose a camera on Linux](#choose-a-camera-on-linux) to find the correct index.
 
 ```bash
 # Image or video
 yolo predict model=yolo26n.pt source=path/to/input.mp4
 
-# Webcam
+# Webcam (replace 0 with your camera's index)
 yolo predict model=yolo26n.pt source=0 show=True
-```
-
-```bash
-# astra
-yolo predict model=yolo26n.pt source=48 show=True
 ```
 
 Predictions are written to `runs/detect/predict/` by default. Ultralytics creates incremented directories such as `predict2/` when the default output already exists.
@@ -46,6 +41,36 @@ from ultralytics import YOLO
 model = YOLO("yolo26n.pt")
 results = model.predict(source="path/to/input.jpg", save=True)
 ```
+
+### Choose a camera on Linux
+
+List connected cameras and their device paths:
+
+```bash
+v4l2-ctl --list-devices
+```
+
+For example, the Astra Pro HD camera was listed on this machine as:
+
+```text
+Astra Pro HD Camera:
+    /dev/video48
+    /dev/video49
+```
+
+The number after `/dev/video` is the YOLO `source` number. A camera can expose multiple devices, including a video stream and a metadata device. Inspect a device with:
+
+```bash
+v4l2-ctl -d /dev/video48 --info
+```
+
+Under **Device Caps**, look for **Video Capture**. A device showing only **Metadata Capture** cannot provide images. For the Astra camera above, `/dev/video48` provides video and `/dev/video49` provides metadata, so run:
+
+```bash
+yolo predict model=yolo26n.pt source=48 show=True
+```
+
+Device numbers can change after reconnecting a camera or rebooting. Run the listing again when switching cameras, then use the number of the video capture device as `source`.
 
 ## Train on a custom dataset
 
